@@ -1,15 +1,33 @@
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import axiosInstance from "../request/config/axios";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+
+const getMovies = () => axiosInstance.get("/hello").then(({ data }) => data);
+const moviesQueryKey = ["movies"];
 
 export default function Home() {
-  const { data, isLoading } = useQuery(["/hello"]);
+  const { data } = useQuery(moviesQueryKey, getMovies);
 
-  return isLoading ? (
-    <p>Data is fetching ...</p>
-  ) : (
+  return (
     <>
       <h1>Movies List</h1>
-      {JSON.stringify(data)}
+      {data.map(({ id, title }) => (
+        <h2 key={id}>{title}</h2>
+      ))}
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(moviesQueryKey, getMovies);
+
+  const dehydrated = dehydrate(queryClient);
+  console.log(dehydrated);
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 }
