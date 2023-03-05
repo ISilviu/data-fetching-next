@@ -23,8 +23,6 @@ export async function getServerSideProps() {
 
   await queryClient.prefetchQuery(moviesQueryKey, getMovies);
 
-  const dehydrated = dehydrate(queryClient);
-  console.log(dehydrated);
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
