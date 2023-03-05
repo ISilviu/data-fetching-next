@@ -1,22 +1,12 @@
-// 
 import React from "react";
-import { Inter } from "next/font/google";
-import axios from "../request/config/axios";
-
-const inter = Inter({ subsets: ["latin"] });
+import { useQuery } from "react-query";
 
 export default function Home() {
-  const [data, setData] = React.useState([]);
+  const { data, isLoading } = useQuery(["/hello"]);
 
-  React.useEffect(() => {
-    axios.get("/hello").then((response) => {
-      if (response.data) {
-        setData(response.data);
-      }
-    });
-  }, []);
-
-  return (
+  return isLoading ? (
+    <p>Data is fetching ...</p>
+  ) : (
     <>
       <h1>Movies List</h1>
       {JSON.stringify(data)}
