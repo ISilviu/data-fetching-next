@@ -1,5 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useQuery } from "react-query";
 
 export default function Home() {
   const { data, isLoading } = useQuery(["/hello"]);
