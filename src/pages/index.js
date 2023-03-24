@@ -6,9 +6,11 @@ const getMovies = () => axiosInstance.get("/hello").then(({ data }) => data);
 const moviesQueryKey = ["movies"];
 
 export default function Home() {
-  const { data } = useQuery(moviesQueryKey, getMovies);
+  const { data, isLoading } = useQuery(moviesQueryKey, getMovies);
 
-  return (
+  return isLoading ? (
+    <p>Data is fetching ...</p>
+  ) : (
     <>
       <h1>Movies List</h1>
       {data.map(({ id, title }) => (
